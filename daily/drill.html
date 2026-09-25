@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FAF9F5">
+<title>تمرین روزانهٔ ستون‌ها</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF9F5; --surface:#FFFFFF; --surface-alt:#F0EEE6;
+    --text:#141413; --text-2:#6C6B68; --text-3:#8F8E8A;
+    --line:#E5E3DA; --line-2:#D6D3C7;
+    --accent:#D97757; --accent-deep:#B85C3E; --en:#3B4A6B;
+    --ok:#4F7A52; --ok-bg:#EAF1E8; --bad-bg:#F6EDE9;
+    --g-tense:#3B4A6B; --g-passive:#B85C3E; --g-cond:#4F7A52;
+    --fa:"Vazirmatn","Segoe UI",Tahoma,sans-serif;
+    --serif:"Source Serif 4",Georgia,serif;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;padding:calc(1.1rem + env(safe-area-inset-top)) 0 calc(3rem + env(safe-area-inset-bottom));
+    background:var(--bg);color:var(--text);font-family:var(--fa);font-size:16px;line-height:1.8;
+    overflow-wrap:break-word}
+  .wrap{max-width:44rem;margin:0 auto;padding:0 .95rem}
+
+  en{direction:ltr;unicode-bidi:isolate;font-family:var(--serif);color:var(--en)}
+  x{direction:ltr;unicode-bidi:isolate;font-family:var(--serif);color:var(--accent-deep);
+    text-decoration:line-through;text-decoration-thickness:1px}
+
+  h1{font-size:1.05rem;font-weight:700;margin:0 0 .3rem;line-height:1.6}
+  .date{font-size:.82rem;color:var(--text-2);margin:0 0 .35rem}
+  .hint{margin:0 0 1rem;color:var(--text-3);font-size:.84rem;line-height:1.75}
+
+  /* ── نوار بالا ─────────────────────────── */
+  .bar{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;align-items:center;
+    gap:.5rem;padding:.55rem 0;margin-bottom:.6rem;border-bottom:1px solid var(--line)}
+  .prog{flex:1;font-size:.84rem;color:var(--text-2);line-height:1.5}
+  .prog b{color:var(--text);font-weight:600}
+  .prog .o{color:var(--ok)} .prog .x{color:var(--accent-deep)}
+  .meter{height:4px;background:var(--line);border-radius:2px;margin-top:.35rem;overflow:hidden;display:flex}
+  .meter i{display:block;height:100%}
+  .meter .mo{background:var(--ok)} .meter .mx{background:var(--accent)}
+  .tool{flex:none;min-height:40px;font:inherit;font-size:.8rem;color:var(--text-2);
+    background:var(--surface-alt);border:0;border-radius:9px;padding:.4rem .7rem;cursor:pointer}
+  .tool[aria-pressed="true"]{background:#E7E4DA;color:var(--text)}
+
+  /* ── نقاط ضعف ──────────────────────────── */
+  .stats{background:var(--surface);border:1px solid var(--line-2);border-radius:14px;
+    padding:.9rem .85rem;margin:0 0 1.1rem}
+  .stats h2{font-size:.9rem;margin:0 0 .6rem}
+  .stats .empty{font-size:.86rem;color:var(--text-3);margin:0}
+  .st{display:grid;grid-template-columns:auto 1fr 4.5rem;gap:.15rem .55rem;align-items:center;
+    padding:.45rem 0;border-top:1px solid var(--line);font-size:.85rem}
+  .st:first-of-type{border-top:0}
+  .st .nm{line-height:1.5}
+  .st .nm small{display:block;color:var(--text-3);font-size:.75rem;direction:ltr;text-align:right;font-family:var(--serif)}
+  .st .ct{font-size:.78rem;color:var(--text-2);text-align:left;direction:ltr}
+  .st .sb{grid-column:1 / -1;height:4px;background:var(--line);border-radius:2px;overflow:hidden}
+  .st .sb i{display:block;height:100%;background:var(--accent);margin-inline-start:auto}
+  .stats .foot{font-size:.78rem;color:var(--text-3);margin:.7rem 0 0}
+
+  .chip{display:inline-block;font-size:.7rem;font-weight:600;line-height:1;padding:.3rem .45rem;
+    border-radius:6px;color:#fff;vertical-align:middle;white-space:nowrap}
+  .g-tense{background:var(--g-tense)} .g-passive{background:var(--g-passive)} .g-cond{background:var(--g-cond)}
+
+  /* ── کارت‌ها ───────────────────────────── */
+  ol.list{list-style:none;margin:0;padding:0}
+  .card{border-bottom:1px solid var(--line);scroll-margin-top:4.5rem}
+  .q{display:flex;gap:.65rem;width:100%;text-align:right;font:inherit;color:var(--text);
+    background:none;border:0;padding:.75rem .15rem;cursor:pointer;border-radius:8px;align-items:baseline}
+  .q:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+  .q .num{flex:none;min-width:1.9rem;font-size:.78rem;color:var(--text-3);font-weight:500}
+  .q .fa{font-size:1.04rem;line-height:1.85}
+  .card.open .q{background:#F3E9E4}
+  .card.ok .num{color:var(--ok);font-weight:700}
+  .card.bad .num{color:var(--accent-deep);font-weight:700}
+  .card.ok .num::after{content:" ✓"} .card.bad .num::after{content:" ✗"}
+
+  .panel{margin:.4rem 0 1.1rem;background:var(--surface);border:1px solid var(--line-2);
+    border-radius:14px;padding:1.05rem .9rem}
+  .attempt label{display:block;font-size:.82rem;color:var(--text-3);margin-bottom:.45rem}
+  textarea{width:100%;min-height:4.2rem;resize:vertical;direction:ltr;text-align:left;
+    font-family:var(--serif);font-size:1rem;line-height:1.6;color:var(--en);
+    padding:.65rem .75rem;background:var(--bg);border:1px solid var(--line);border-radius:9px}
+  textarea:focus{outline:none;border-color:var(--accent);background:var(--surface)}
+  .acts{display:flex;align-items:center;gap:.5rem;margin-top:.7rem}
+  .reveal{flex:1;min-height:44px;font:inherit;font-size:.92rem;font-weight:500;
+    padding:.65rem 1rem;background:var(--accent);color:#fff;border:0;border-radius:10px;cursor:pointer}
+  .reveal:active{background:var(--accent-deep)}
+
+  .answer[hidden]{display:none}
+  .answer{margin-top:1.15rem;padding-top:1.05rem;border-top:1px solid var(--line)}
+  .en-line{direction:ltr;text-align:left;font-family:var(--serif);font-weight:600;
+    font-size:1.08rem;line-height:1.5;color:var(--en);margin:0 0 1.15rem;
+    padding-bottom:.9rem;border-bottom:1px solid var(--line)}
+
+  .row{margin-bottom:1.2rem}
+  .key{font-size:.78rem;color:var(--text-3);line-height:1.6;margin-bottom:.25rem}
+  .val{font-size:.95rem;line-height:1.85}
+  .val > p{margin:0 0 .6rem}
+  .val > p:last-child{margin-bottom:0}
+  .sname{margin-bottom:.4rem;font-size:.92rem}
+  .sname span.en{display:block;direction:ltr;text-align:left;font-family:var(--serif);color:var(--text-2);font-size:.88rem}
+  .skeleton{direction:ltr;text-align:left;font-family:var(--serif);font-size:.97rem;
+    color:var(--en);background:var(--surface-alt);border-radius:8px;padding:.55rem .7rem;line-height:1.6;
+    overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch}
+
+  ul.misses{margin:0;padding:0;list-style:none}
+  ul.misses li{margin-bottom:.85rem;padding-inline-start:1.1rem;position:relative}
+  ul.misses li:last-child{margin-bottom:0}
+  ul.misses li::before{content:"\00d7";position:absolute;inset-inline-start:0;top:0;
+    color:var(--accent-deep);font-weight:600}
+  ul.misses .bad{direction:ltr;unicode-bidi:isolate;font-family:var(--serif);color:var(--accent-deep);
+    display:inline-block;line-height:1.55}
+  ul.misses em{display:block;font-style:normal;font-size:.89rem;color:var(--text-2);line-height:1.75;margin-top:.2rem}
+
+  .grade{display:flex;gap:.5rem;margin-top:1.1rem;padding-top:1rem;border-top:1px solid var(--line)}
+  .grade button{flex:1;min-height:44px;font:inherit;font-size:.9rem;font-weight:500;border-radius:10px;
+    cursor:pointer;border:1px solid var(--line-2);background:var(--surface);color:var(--text-2)}
+  .grade .g-ok[aria-pressed="true"]{background:var(--ok);border-color:var(--ok);color:#fff}
+  .grade .g-bad[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+
+  .done{display:none;text-align:center;margin:1.6rem 0 0;padding:1.1rem;border-radius:14px;
+    background:var(--ok-bg);color:var(--ok);font-size:.92rem}
+  .done.on{display:block}
+
+  @media (min-width:640px){
+    body{font-size:17px;padding-bottom:6rem}
+    .wrap{padding:0 1.5rem}
+    h1{font-size:1.25rem}
+    .q .fa{font-size:1.1rem}
+    .en-line{font-size:1.18rem}
+    .reveal{flex:none;padding:.6rem 1.5rem}
+    .panel{padding:1.4rem}
+    .row{display:grid;grid-template-columns:7rem 1fr;gap:0 1.1rem}
+    .key{line-height:1.9;margin-bottom:0}
+    .grade button{flex:none;padding:.5rem 1.4rem}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none !important;scroll-behavior:auto !important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>تمرین روزانه — زمان‌ها، مجهول، شرطی</h1>
+  <div class="date" id="date"></div>
+  <p class="hint">هر روز یک دست تازه: از هر ساختار دست‌کم دو جمله، قاطی. اسم ساختار را نمی‌بینی — تشخیصش جزو تمرین است. ترجمه کن، Enter پاسخ را نشان می‌دهد، بعد صادقانه ✓ یا ✗ بزن. ساختارهایی که زیاد ✗ می‌خورند فردا بیشتر می‌آیند.</p>
+  <div class="bar">
+    <div class="prog" id="prog"></div>
+    <button class="tool" type="button" id="statsBtn" aria-pressed="false">نقاط ضعف</button>
+    <button class="tool" type="button" id="newBtn">دست تازه</button>
+  </div>
+  <div class="stats" id="stats" hidden></div>
+  <ol class="list" id="list"></ol>
+  <div class="done" id="done">دست امروز تمام شد. فردا دست تازه‌ای می‌آید.</div>
+</div>
+
+<script src="pool-tenses.js"></script>
+<script src="pool-passive.js"></script>
+<script src="pool-conditionals.js"></script>
+<script>
+/* ══════════════════════════════════════════════════════════
+   جمله‌ها در سه فایل pool-*.js هستند و به window.POOL اضافه می‌شوند.
+   هر جمله: { id, slot, fa, en, why: [..], misses: [{en, why}], alt? }
+   داخل رشته‌ها انگلیسی در <en>…</en> و شکل غلط در <x>…</x>.
+   ══════════════════════════════════════════════════════════ */
+
+const SLOTS = [
+  // ── زمان‌ها
+  { id:"t-ps",   group:"tense", fa:"حال ساده",               name:"Present simple",                formula:"S + V / V-s" },
+  { id:"t-pc",   group:"tense", fa:"حال استمراری",           name:"Present continuous",            formula:"S + am / is / are + V-ing" },
+  { id:"t-pp",   group:"tense", fa:"حال کامل",               name:"Present perfect",               formula:"S + have / has + V3" },
+  { id:"t-ppc",  group:"tense", fa:"حال کامل استمراری",      name:"Present perfect continuous",    formula:"S + have / has been + V-ing" },
+  { id:"t-pas",  group:"tense", fa:"گذشتهٔ ساده",            name:"Past simple",                   formula:"S + V2" },
+  { id:"t-pac",  group:"tense", fa:"گذشتهٔ استمراری",        name:"Past continuous",               formula:"S + was / were + V-ing" },
+  { id:"t-pap",  group:"tense", fa:"گذشتهٔ کامل",            name:"Past perfect",                  formula:"S + had + V3" },
+  { id:"t-papc", group:"tense", fa:"گذشتهٔ کامل استمراری",   name:"Past perfect continuous",       formula:"S + had been + V-ing" },
+  { id:"t-fw",   group:"tense", fa:"آینده با <en>will</en>",           name:"Future: will",                  formula:"S + will + V" },
+  { id:"t-fg",   group:"tense", fa:"آینده با <en>be going to</en>",    name:"Future: be going to",           formula:"S + am / is / are going to + V" },
+  { id:"t-fc",   group:"tense", fa:"آیندهٔ استمراری",        name:"Future continuous",             formula:"S + will be + V-ing" },
+  { id:"t-fp",   group:"tense", fa:"آیندهٔ کامل",            name:"Future perfect",                formula:"S + will have + V3" },
+  { id:"t-fpc",  group:"tense", fa:"آیندهٔ کامل استمراری",   name:"Future perfect continuous",     formula:"S + will have been + V-ing" },
+  { id:"t-fip",  group:"tense", fa:"آینده در گذشته",         name:"Future in the past",            formula:"S + was / were going to + V   |   S + would + V" },
+  // ── مجهول
+  { id:"p-ps",   group:"passive", fa:"مجهول حال ساده",        name:"Present simple passive",        formula:"S + am / is / are + V3" },
+  { id:"p-pc",   group:"passive", fa:"مجهول حال استمراری",    name:"Present continuous passive",    formula:"S + am / is / are being + V3" },
+  { id:"p-pas",  group:"passive", fa:"مجهول گذشتهٔ ساده",     name:"Past simple passive",           formula:"S + was / were + V3" },
+  { id:"p-pac",  group:"passive", fa:"مجهول گذشتهٔ استمراری", name:"Past continuous passive",       formula:"S + was / were being + V3" },
+  { id:"p-pp",   group:"passive", fa:"مجهول حال کامل",        name:"Present perfect passive",       formula:"S + have / has been + V3" },
+  { id:"p-pap",  group:"passive", fa:"مجهول گذشتهٔ کامل",     name:"Past perfect passive",          formula:"S + had been + V3" },
+  { id:"p-fw",   group:"passive", fa:"مجهول آینده",           name:"Future passive",                formula:"S + will be + V3   |   S + is going to be + V3" },
+  { id:"p-fp",   group:"passive", fa:"مجهول آیندهٔ کامل",     name:"Future perfect passive",        formula:"S + will have been + V3" },
+  { id:"p-mod",  group:"passive", fa:"مجهول با <en>modal</en>",        name:"Modal passive",                 formula:"S + can / must / should … + be + V3" },
+  { id:"p-modp", group:"passive", fa:"مجهول <en>modal</en> گذشته",     name:"Modal perfect passive",         formula:"S + should / must / could … + have been + V3" },
+  { id:"p-nf",   group:"passive", fa:"مصدر و اسم‌مصدر مجهول", name:"Infinitive / gerund passive",   formula:"… to be + V3   |   … being + V3" },
+  { id:"p-imp",  group:"passive", fa:"مجهول غیرشخصی",         name:"Impersonal passive",            formula:"It is said that + clause   |   S + is said to + V / to have + V3" },
+  { id:"p-caus", group:"passive", fa:"سببی و <en>get</en>-مجهول",    name:"Causative / get-passive",       formula:"have / get + O + V3   |   S + get + V3" },
+  // ── شرطی
+  { id:"c-0",    group:"cond", fa:"شرطی نوع صفر",            name:"Zero conditional",              formula:"If + present, present" },
+  { id:"c-1",    group:"cond", fa:"شرطی نوع اول",            name:"First conditional",             formula:"If + present, will / can / imperative + V" },
+  { id:"c-2",    group:"cond", fa:"شرطی نوع دوم",            name:"Second conditional",            formula:"If + past, would / could + V" },
+  { id:"c-3",    group:"cond", fa:"شرطی نوع سوم",            name:"Third conditional",             formula:"If + had + V3, would / could have + V3" },
+  { id:"c-m1",   group:"cond", fa:"مختلط: شرط گذشته، نتیجهٔ حال", name:"Mixed: past → present",    formula:"If + had + V3, would + V (now)" },
+  { id:"c-m2",   group:"cond", fa:"مختلط: شرط حال، نتیجهٔ گذشته", name:"Mixed: present → past",    formula:"If + past (always true), would have + V3" },
+  { id:"c-unl",  group:"cond", fa:"<en>unless</en> و <en>provided that</en>",   name:"unless / provided / as long as", formula:"unless + present = if … not   |   provided (that) / as long as + present" },
+  { id:"c-wt",   group:"cond", fa:"شرطی با <en>were to</en>",                  name:"If … were to",                  formula:"If + S + were to + V, would + V" },
+  { id:"c-inv",  group:"cond", fa:"شرطی وارونه",             name:"Inverted conditional",          formula:"Had + S + V3 …   |   Should + S + V …   |   Were + S + (to) …" },
+  { id:"c-bf",   group:"cond", fa:"<en>but for</en> و <en>otherwise</en>",      name:"but for / if it weren't for / otherwise", formula:"But for + noun, would …   |   …; otherwise, would …" }
+];
+
+const STORE     = "daily-grammar-v1";
+const PER_SLOT  = 2;      // حداقل از هر ساختار
+const EXTRA_MAX = 8;      // حداکثر ساختار ضعیف که جملهٔ سوم می‌گیرد
+const WEAK_AT   = 0.34;   // نرخ ✗ که ساختار را ضعیف حساب می‌کند
+const GROUP_FA  = { tense:"زمان", passive:"مجهول", cond:"شرطی" };
+
+const POOL  = window.POOL || [];
+const SLOT  = Object.fromEntries(SLOTS.map(s => [s.id, s]));
+const BY_ID = Object.fromEntries(POOL.map(p => [p.id, p]));
+const faNum = n => n.toLocaleString('fa-IR');
+
+/* ── ذخیره ─────────────────────────────── */
+let mem = null;
+function load(){
+  try { const v = JSON.parse(localStorage.getItem(STORE)); if (v && typeof v === 'object') return v; } catch(e){}
+  return mem || {};
+}
+function save(){
+  mem = S;
+  try { localStorage.setItem(STORE, JSON.stringify(S)); } catch(e){}
+}
+const S = load();
+S.items = S.items || {};
+
+const today = () => {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+};
+const daysBetween = (a, b) => Math.round((Date.parse(b) - Date.parse(a)) / 864e5);
+
+/* ── قرعه ─────────────────────────────── */
+function rngFrom(str){
+  let h = 1779033703 ^ str.length;
+  for (let i = 0; i < str.length; i++){ h = Math.imul(h ^ str.charCodeAt(i), 3432918353); h = h << 13 | h >>> 19; }
+  let a = h >>> 0;
+  return () => {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+function slotStats(slotId){
+  let ok = 0, bad = 0;
+  POOL.forEach(p => {
+    if (p.slot !== slotId) return;
+    (S.items[p.id]?.h || []).forEach(m => m ? ok++ : bad++);
+  });
+  const n = ok + bad;
+  return { ok, bad, n, err: n ? bad / n : 0 };
+}
+
+/* جمله‌ای که مدتی دیده نشده یا آخرین بار ✗ خورده وزن بیشتری دارد */
+function itemWeight(p, date){
+  const r = S.items[p.id];
+  if (!r || !r.seen) return 4;
+  let w = Math.min(Math.max(daysBetween(r.seen, date), 0), 6) / 2 + 0.2;
+  if (r.h?.length && r.h[r.h.length - 1] === 0) w += 1.5;
+  return w;
+}
+
+function pick(arr, k, rnd, wfn){
+  const pool = arr.slice(), out = [];
+  while (out.length < k && pool.length){
+    const ws = pool.map(wfn), tot = ws.reduce((a, b) => a + b, 0);
+    let x = rnd() * tot, i = 0;
+    while (i < pool.length - 1 && (x -= ws[i]) > 0) i++;
+    out.push(pool.splice(i, 1)[0]);
+  }
+  return out;
+}
+
+function weakSlots(){
+  return SLOTS.map(s => ({ id: s.id, ...slotStats(s.id) }))
+    .filter(s => s.n >= 2 && s.err >= WEAK_AT)
+    .sort((a, b) => b.err - a.err || b.n - a.n)
+    .slice(0, EXTRA_MAX).map(s => s.id);
+}
+
+function draw(date, n){
+  const rnd  = rngFrom(date + '#' + n);
+  const weak = weakSlots();
+  const ids  = [];
+  SLOTS.forEach(s => {
+    const items = POOL.filter(p => p.slot === s.id);
+    const k = PER_SLOT + (weak.includes(s.id) ? 1 : 0);
+    ids.push(...pick(items, k, rnd, p => itemWeight(p, date)).map(p => p.id));
+  });
+  for (let i = ids.length - 1; i > 0; i--){
+    const j = Math.floor(rnd() * (i + 1)); [ids[i], ids[j]] = [ids[j], ids[i]];
+  }
+  /* دو جملهٔ یک ساختار پشت سر هم نیایند */
+  for (let i = 1; i < ids.length; i++){
+    if (BY_ID[ids[i]].slot !== BY_ID[ids[i-1]].slot) continue;
+    for (let j = i + 1; j < ids.length; j++){
+      const sj = BY_ID[ids[j]].slot;
+      if (sj !== BY_ID[ids[i-1]].slot && (i + 1 >= ids.length || sj !== BY_ID[ids[i+1]].slot)){
+        [ids[i], ids[j]] = [ids[j], ids[i]]; break;
+      }
+    }
+  }
+  return ids;
+}
+
+function ensureDay(forceNew){
+  const d = today();
+  const same = S.day && S.day.date === d;
+  if (!forceNew && same && S.day.ids?.length && S.day.ids.every(id => BY_ID[id])) return;
+  const n = same ? (S.day.n || 0) + 1 : 0;
+  S.day = { date: d, n, ids: draw(d, n), marks: {}, drafts: {}, shown: {} };
+  save();
+}
+
+function mark(id, v){
+  const r = S.items[id] = S.items[id] || {};
+  r.h = r.h || [];
+  if (id in S.day.marks) r.h.pop();
+  r.h.push(v);
+  if (r.h.length > 6) r.h.shift();
+  r.seen = S.day.date;
+  S.day.marks[id] = v;
+  save();
+}
+
+/* ── نمایش ─────────────────────────────── */
+const listEl  = document.getElementById('list');
+const progEl  = document.getElementById('prog');
+const statsEl = document.getElementById('stats');
+const doneEl  = document.getElementById('done');
+
+const row = (k, v) => `<div class="row"><div class="key">${k}</div><div class="val">${v}</div></div>`;
+
+function answerHTML(p){
+  const s = SLOT[p.slot];
+  let b = `<p class="en-line">${p.en}</p>`;
+  b += row('ساختار', `<div class="sname"><span class="chip g-${s.group}">${GROUP_FA[s.group]}</span> ${s.fa}<span class="en">${s.name}</span></div><div class="skeleton">${s.formula}</div>`);
+  b += row('چرا این شکل', [].concat(p.why).map(x => `<p>${x}</p>`).join(''));
+  if (p.misses?.length) b += row('اگر این را نوشتی',
+    `<ul class="misses">${p.misses.map(m => `<li><span class="bad">${m.en}</span><em>${m.why}</em></li>`).join('')}</ul>`);
+  if (p.alt) b += row('هم قبول است', p.alt);
+  return b;
+}
+
+function paintProgress(){
+  const total = S.day.ids.length;
+  const vals  = S.day.ids.map(id => S.day.marks[id]).filter(v => v !== undefined);
+  const ok = vals.filter(v => v === 1).length, bad = vals.length - ok;
+  const [y, m, d] = S.day.date.split('-').map(Number);
+  const dateFa = new Date(y, m - 1, d).toLocaleDateString('fa-IR', { weekday:'long', day:'numeric', month:'long' });
+  document.getElementById('date').textContent = dateFa;
+  progEl.innerHTML = `<b>${faNum(vals.length)}</b> از ${faNum(total)} · <span class="o">✓ ${faNum(ok)}</span> · <span class="x">✗ ${faNum(bad)}</span>
+    <div class="meter"><i class="mo" style="width:${ok/total*100}%"></i><i class="mx" style="width:${bad/total*100}%"></i></div>`;
+  doneEl.classList.toggle('on', vals.length === total);
+}
+
+function renderStats(){
+  const rows = SLOTS.map(s => ({ s, ...slotStats(s.id) })).filter(r => r.n);
+  if (!rows.length){
+    statsEl.innerHTML = '<h2>نقاط ضعف</h2><p class="empty">هنوز علامتی نزده‌ای. بعد از چند جمله اینجا ساختارها به ترتیب نرخ ✗ مرتب می‌شوند.</p>';
+    return;
+  }
+  rows.sort((a, b) => b.err - a.err || b.n - a.n);
+  const weak = weakSlots();
+  statsEl.innerHTML = '<h2>نقاط ضعف</h2>' + rows.map(r => `
+    <div class="st">
+      <span class="chip g-${r.s.group}">${GROUP_FA[r.s.group]}</span>
+      <span class="nm">${r.s.fa}${weak.includes(r.s.id) ? ' ·  <span style="color:var(--accent-deep);font-size:.75rem">جملهٔ سوم می‌گیرد</span>' : ''}<small>${r.s.name}</small></span>
+      <span class="ct">✗ ${r.bad} / ${r.n}</span>
+      <span class="sb"><i style="width:${r.err*100}%"></i></span>
+    </div>`).join('') +
+    `<p class="foot">شمارش از شش علامت آخرِ هر جمله است. ${faNum(SLOTS.length - rows.length)} ساختار هنوز علامتی ندارد.</p>`;
+}
+
+function renderList(){
+  listEl.innerHTML = S.day.ids.map((id, i) => {
+    const m = S.day.marks[id];
+    return `<li class="card${m === 1 ? ' ok' : m === 0 ? ' bad' : ''}" data-i="${i}">
+      <button class="q" type="button"><span class="num">${faNum(i + 1)}</span><span class="fa">${BY_ID[id].fa}</span></button>
+    </li>`;
+  }).join('');
+  paintProgress();
+}
+
+/* ── باز و بسته کردن ─────────────────── */
+let active = null;
+const cards = () => [...listEl.children];
+
+function bring(el){
+  const vh = (window.visualViewport && window.visualViewport.height) || innerHeight;
+  const card = cards()[active];
+  if (!card) return;
+  const top = card.getBoundingClientRect().top;
+  const bottom = (el || card).getBoundingClientRect().bottom;
+  const barH = 64;
+  if (bottom <= vh - 12 && top >= barH) return;
+  const delta = Math.min(bottom - vh + 16, top - barH);
+  if (Math.abs(delta) > 4) window.scrollBy({ top: delta, behavior: 'smooth' });
+}
+
+function close(){
+  if (active === null) return;
+  const c = cards()[active];
+  c.classList.remove('open');
+  c.querySelector('.panel')?.remove();
+  active = null;
+}
+
+function open(i){
+  close();
+  active = i;
+  const id = S.day.ids[i], p = BY_ID[id];
+  const c = cards()[i];
+  const marked = S.day.marks[id];
+  const shown = marked !== undefined || S.day.shown[id];
+  c.classList.add('open');
+  c.insertAdjacentHTML('beforeend', `
+    <div class="panel">
+      <div class="attempt">
+        <label>ترجمه‌ات را بنویس:</label>
+        <textarea spellcheck="false" autocomplete="off"></textarea>
+        <div class="acts"><button class="reveal" type="button"${shown ? ' hidden' : ''}>نمایش پاسخ</button></div>
+      </div>
+      <div class="answer"${shown ? '' : ' hidden'}>
+        ${answerHTML(p)}
+        <div class="grade">
+          <button class="g-ok"  type="button" aria-pressed="${marked === 1}">درست گفتم ✓</button>
+          <button class="g-bad" type="button" aria-pressed="${marked === 0}">اشتباه کردم ✗</button>
+        </div>
+      </div>
+    </div>`);
+
+  const ta = c.querySelector('textarea'), ans = c.querySelector('.answer'), rev = c.querySelector('.reveal');
+  ta.value = S.day.drafts[id] || '';
+
+  const reveal = () => {
+    if (!ans.hidden) return;
+    ans.hidden = false; rev.hidden = true;
+    S.day.shown[id] = 1; save();
+    bring(ans.querySelector('.en-line'));
+  };
+  const nextOpen = () => {
+    const ids = S.day.ids;
+    for (let k = 1; k <= ids.length; k++){
+      const j = (i + k) % ids.length;
+      if (S.day.marks[ids[j]] === undefined) return open(j);
+    }
+    close();
+  };
+
+  rev.addEventListener('click', reveal);
+  let t;
+  ta.addEventListener('input', () => {
+    clearTimeout(t);
+    t = setTimeout(() => { S.day.drafts[id] = ta.value; save(); }, 300);
+  });
+  /* Enter → نمایش پاسخ، Enter دوباره → جملهٔ بعدی، Shift+Enter → خط تازه */
+  ta.addEventListener('keydown', e => {
+    if (e.key !== 'Enter' || e.shiftKey || e.isComposing || e.keyCode === 229) return;
+    e.preventDefault();
+    S.day.drafts[id] = ta.value; save();
+    ans.hidden ? reveal() : nextOpen();
+  });
+  c.querySelectorAll('.grade button').forEach(b => b.addEventListener('click', () => {
+    S.day.drafts[id] = ta.value;
+    mark(id, b.classList.contains('g-ok') ? 1 : 0);
+    c.classList.toggle('ok',  S.day.marks[id] === 1);
+    c.classList.toggle('bad', S.day.marks[id] === 0);
+    paintProgress();
+    if (!statsEl.hidden) renderStats();
+    nextOpen();
+  }));
+
+  ta.focus({ preventScroll: true });
+  bring(shown ? ans.querySelector('.en-line') : null);
+}
+
+listEl.addEventListener('click', e => {
+  const q = e.target.closest('.q');
+  if (!q) return;
+  const i = +q.parentNode.dataset.i;
+  active === i ? close() : open(i);
+});
+
+document.getElementById('statsBtn').addEventListener('click', e => {
+  const on = statsEl.hidden;
+  statsEl.hidden = !on;
+  e.currentTarget.setAttribute('aria-pressed', on);
+  if (on) renderStats();
+});
+
+document.getElementById('newBtn').addEventListener('click', () => {
+  const left = S.day.ids.length - Object.keys(S.day.marks).length;
+  if (left > 0 && !document.getElementById('newBtn').dataset.armed){
+    const b = document.getElementById('newBtn');
+    b.dataset.armed = '1'; b.textContent = 'مطمئنی؟ دوباره بزن';
+    setTimeout(() => { delete b.dataset.armed; b.textContent = 'دست تازه'; }, 3000);
+    return;
+  }
+  close();
+  ensureDay(true);
+  renderList();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  const b = document.getElementById('newBtn'); delete b.dataset.armed; b.textContent = 'دست تازه';
+});
+
+if (window.visualViewport){
+  let t;
+  window.visualViewport.addEventListener('resize', () => {
+    clearTimeout(t);
+    t = setTimeout(() => { if (active !== null) bring(cards()[active].querySelector('.panel')); }, 150);
+  });
+}
+
+/* بررسی سلامت مخزن — در کنسول: checkPool() */
+window.checkPool = () => {
+  const counts = Object.fromEntries(SLOTS.map(s => [s.id, 0]));
+  const dup = [], orphan = [], seenIds = new Set();
+  POOL.forEach(p => {
+    if (seenIds.has(p.id)) dup.push(p.id); seenIds.add(p.id);
+    p.slot in counts ? counts[p.slot]++ : orphan.push(p.id);
+  });
+  const thin = Object.entries(counts).filter(([, n]) => n < 10);
+  const sample = draw('2000-01-01', 0), cover = {};
+  sample.forEach(id => cover[BY_ID[id].slot] = (cover[BY_ID[id].slot] || 0) + 1);
+  const uncovered = SLOTS.filter(s => (cover[s.id] || 0) < PER_SLOT).map(s => s.id);
+  const res = { total: POOL.length, dup, orphan, thin, drawSize: sample.length, uncovered };
+  console.log(res);
+  return res;
+};
+
+ensureDay(false);
+renderList();
+</script>
+
+</body>
+</html>
